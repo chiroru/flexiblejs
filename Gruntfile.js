@@ -48,8 +48,6 @@ module.exports = function(grunt){
     }
   }
 
-//  grunt.registerTask('init',
-//    ['copy:init']);
-  grunt.registerTask('default',
-    ['livereload-start', 'connect', 'regarde']);
+  grunt.registerTask('init', ['bower:install']);
+  grunt.registerTask('default', ['livereload-start', 'connect', 'regarde']);
 };
