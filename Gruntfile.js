@@ -10,6 +10,10 @@ module.exports = function(grunt){
   var packages = grunt.file.readJSON('package.json');
 
   grunt.initConfig({
+    bower: {
+      install: {
+      }
+    },
     connect: {
       livereload: {
         options: {
@@ -39,10 +43,13 @@ module.exports = function(grunt){
   var contrib;
   for (contrib in packages.devDependencies) {
     if (contrib.substring(0, 6) === 'grunt-') {
+      console.log(contrib);
       grunt.loadNpmTasks(contrib);
     }
   }
 
+//  grunt.registerTask('init',
+//    ['copy:init']);
   grunt.registerTask('default',
     ['livereload-start', 'connect', 'regarde']);
 };
