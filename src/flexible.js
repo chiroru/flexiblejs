@@ -1,19 +1,20 @@
 /**
- * JavaScript の低レベルAPIを提供します。
+ * @fileOverview
+ * flexibleの低レベルAPIを提供します。
  *
- * @module flexible
  */
 var flexible = flexible || {};
 
+/**
+ * flexible のバージョンです。
+ */
 flexible.version = '0.0.1-dev';
 
 /**
  * このメソッドは引数に指定された文字列の名前空間を定義します。
- *
- * @namespace flexible
- * @module flexible
- * @type Function
- * @param {String} ns 名前空間文字列
+ * 
+ * @param {String} ns 作成対象の名前空間の文字列表現
+ * @exception {Error} 不正な書式の名前空間の文字列表現を指定した場合に例外をスローします。
  */
 flexible.namespace = function(ns) {
 

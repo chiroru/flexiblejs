@@ -54,6 +54,14 @@ module.exports = function(grunt){
         paths: ['./src/'],
         outdir: 'doc'
       }
+    },
+    jsdoc: {
+      dist: {
+        src: ['src/**/*.js'],
+        options: {
+          destination: 'doc'
+        }
+      }
     }
   });
 
@@ -68,5 +76,5 @@ module.exports = function(grunt){
   grunt.registerTask('init', ['bower:install']);
   grunt.registerTask('default', ['livereload-start', 'connect', 'regarde']);
   grunt.registerTask('dev', ['watch']);
-  grunt.registerTask('doc', ['yuidoc']);
+  grunt.registerTask('doc', ['jsdoc']);
 };
