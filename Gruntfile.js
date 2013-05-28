@@ -7,7 +7,10 @@ var folderMount = function(connect, point) {
 };
 
 module.exports = function(grunt){
-  var packages = grunt.file.readJSON('package.json');
+  var pkg = grunt.file.readJSON('package.json');
+
+  grunt.event.on('qunit.spawn', function(url) {
+  });
 
   grunt.initConfig({
     bower: {
@@ -26,22 +29,36 @@ module.exports = function(grunt){
     },
     regarde: {
       html: {
-        files:'*.html',
+        files: ['src/**/*.html', 'test/**/*.html'],
         tasks: ['livereload']
       },
       css: {
-        files:'*.css',
+        files: ['src/**/*.css', 'test/**/*.css'],
         tasks: ['livereload']
       },
       js: {
-        files:'*.js',
+        files: ['src/**/*.js', 'test/**/*.js'],
         tasks: ['livereload']
+      }
+    },
+    qunit: {
+      all: ['test/**/*.html']
+    },
+    watch: {
+      files: ['test/**/*.html', 'src/**/*.js'],
+      tasks: ['qunit']
+    },
+    yuidoc: {
+      compile: pkg,
+      options: {
+        paths: ['./src/'],
+        outdir: 'doc'
       }
     }
   });
 
   var contrib;
-  for (contrib in packages.devDependencies) {
+  for (contrib in pkg.devDependencies) {
     if (contrib.substring(0, 6) === 'grunt-') {
       console.log(contrib);
       grunt.loadNpmTasks(contrib);
@@ -50,4 +67,6 @@ module.exports = function(grunt){
 
   grunt.registerTask('init', ['bower:install']);
   grunt.registerTask('default', ['livereload-start', 'connect', 'regarde']);
+  grunt.registerTask('dev', ['watch']);
+  grunt.registerTask('doc', ['yuidoc']);
 };

@@ -37,15 +37,17 @@
     "grunt-contrib-livereload": "0.1.2",
     "grunt-regarde": "0.1.1",
     "grunt-contrib-watch": "0.4.3",
-    "grunt-contrib-copy" : "0.4.1"
+    "grunt-contrib-qunit": "0.2.1",
+    "grunt-contrib-copy" : "0.4.1",
+    "grunt-contrib-yuidoc" : "0.4.0"
   },
   "keywords": [
   ],
   "engines": {
     "node": ">= 0.11.2"
   },
-  "main": "src/flexiblejs",
+  "main": "src/flexible",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt qunit"
   }
 }
