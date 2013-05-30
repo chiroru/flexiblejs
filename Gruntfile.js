@@ -62,6 +62,11 @@ module.exports = function(grunt){
           destination: 'doc'
         }
       }
+    },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      }
     }
   });
 
@@ -77,4 +82,5 @@ module.exports = function(grunt){
   grunt.registerTask('default', ['livereload-start', 'connect', 'regarde']);
   grunt.registerTask('dev', ['watch']);
   grunt.registerTask('doc', ['jsdoc']);
+  grunt.registerTask('unit', ['karma:unit']);
 };
