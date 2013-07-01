@@ -9,14 +9,19 @@ var folderMount = function(connect, point) {
 module.exports = function(grunt){
   var pkg = grunt.file.readJSON('package.json');
 
-  grunt.event.on('qunit.spawn', function(url) {
-  });
-
-  grunt.initConfig({
+  var config = {
     bower: {
       install: {
+        options: {
+          targetDir: 'js/lib',
+          install: true,
+          verbose: true,
+          cleanTargetDir: true,
+          cleanBowerDir: true
+        }
       }
     },
+
     connect: {
       livereload: {
         options: {
@@ -27,53 +32,49 @@ module.exports = function(grunt){
         }
       }
     },
+
     regarde: {
       html: {
-        files: ['src/**/*.html', 'test/**/*.html'],
+        files: ['html/**/*.html', 'html-test/**/*.html'],
         tasks: ['livereload']
       },
       css: {
-        files: ['src/**/*.css', 'test/**/*.css'],
+        files: ['css/**/*.css', 'css-test/**/*.css'],
         tasks: ['livereload']
       },
       js: {
-        files: ['src/**/*.js', 'test/**/*.js'],
+        files: ['js/**/*.js', 'js-test/**/*.js', 'js-test/**/*.html'],
         tasks: ['livereload']
       }
     },
+
     qunit: {
-      all: ['test/**/*.html']
+      all: ['js-test/**/*.html']
     },
-    watch: {
-      files: ['test/**/*.html', 'src/**/*.js'],
-      tasks: ['qunit']
-    },
-    yuidoc: {
-      compile: pkg,
-      options: {
-        paths: ['./src/'],
-        outdir: 'doc'
-      }
-    },
+
     jsdoc: {
       dist: {
-        src: ['src/**/*.js'],
+        src: ['js/**/*.js'],
         options: {
-          destination: 'doc'
+          destination: 'target/doc'
         }
       }
     },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js'
-      }
-    }
+  };
+
+  /**
+   * PhantomJS がテストの実行を終了した際にトリガーされるイベントのハンドラーです。
+   */
+  grunt.event.on('qunit.spawn', function(url) {
+    // grunt.log.ok("Running test: " + url);
   });
+
+  grunt.initConfig(config);
 
   var contrib;
   for (contrib in pkg.devDependencies) {
     if (contrib.substring(0, 6) === 'grunt-') {
-      console.log(contrib);
+      // console.log(contrib);
       grunt.loadNpmTasks(contrib);
     }
   }
@@ -82,5 +83,17 @@ module.exports = function(grunt){
   grunt.registerTask('default', ['livereload-start', 'connect', 'regarde']);
   grunt.registerTask('dev', ['watch']);
   grunt.registerTask('doc', ['jsdoc']);
-  grunt.registerTask('unit', ['karma:unit']);
+  grunt.registerTask('unit', ['qunit:all']);
 };
+
+/**
+ * [補足事項]
+ * QUnit のイベント
+ * - qunit.begin
+ * - qunit.moduleStart:name
+ * - qunit.testStart:name
+ * - qunit.log:result, actual, expected, message, source
+ * - qunit.testDone: name,failed, passed, total
+ * - qunit.moduleDone: name, failed, passed, total
+ * - qunit.done: failed, passed, total, runtime
+ */
