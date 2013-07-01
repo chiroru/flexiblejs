@@ -1,0 +1,102 @@
+<!DOCTYPE htmll>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Unit Test for flexible.js</title>
+    <link rel="stylesheet" href="../js/lib/qunit/qunit.css"></script>
+<script type="text/javascript" src="../js/flexible.js"></script>
+<script type="text/javascript" src="../js/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../js/lib/qunit/qunit.js"></script>
+<script type="text/javascript">
+module('flexible.version');
+
+test('バージョンのチェック', function() {
+  equal(flexible.version, '0.0.1-dev', 'flexibleのバージョンとして0.0.1-devが設定されている');
+});
+
+module('flexible.namespace');
+
+test('ルートネームスペース\"flexible\"を再定義できる', function () {
+  expect(1);
+  deepEqual(flexible.namespace('flexible'), flexible, 'ルートネームスペースを再定義すると同じオブジェクトが返却される');
+});
+
+test('ネームスペース指定時にundefinedを指定', function() {
+  expect(1);
+  throws(function() {
+      flexible.namespace(undefined);
+    },
+    /An invalid argument \"undefined\" was specified/,
+    'undefinedを引数に指定してネームスペースを定義するとErrorがスローされる'
+  );
+});
+
+test('空のネームスペースを定義する', function() {
+  expect(1);
+  throws(function() {
+      flexible.namespace('');
+    },
+    /An invalid argument \"\" was specified/,
+    '空のネームスペースを定義するとErrorがスローされる'
+  );
+});
+
+test("半角英数以外から始まる名前空間を指定", function() {
+  expect(1);
+  throws(function() {
+      flexible.namespace("0namesp");
+    },
+    Error,
+    "半角英数以外から始まる名前空間を指定すると例外がスローされる."
+  )
+});
+
+test('2階層のネームスペースが指定できる', function() {
+  expect(1);
+  deepEqual(flexible.namespace('test'), flexible.test, '2階層のネームスペース\"flexible.test\"が定義できる');
+});
+
+test('3階層のネームスペースが指定できる', function() {
+  expect(1);
+  ok(flexible.namespace('test1.test2') === flexible.test1.test2, '3階層のネームスペース\"flexible.test1.test2\"が定義できる');
+});
+
+test('関数の実行時にthis参照を指定されたオブジェクトに束縛する', function () {
+  expect(3);
+
+  function func () {
+    console.log("\n============");
+  if (this instanceof restriction) {
+    console.log("\n" + this.echo());
+  } 
+    return this.echo();
+  };
+
+  throws(function () {
+      func()
+    },
+    Error
+  );
+
+  var restriction = function () {
+    this.echo = function () {
+      return "hello";
+    }
+  };
+
+  equal((new restriction()).echo(), "hello");
+
+  var result = flexible.restrict(func, (new restriction()));
+  console.log("RESULT:" + result);
+  equal(result, "hello");
+   
+});
+
+</script>
+</head>
+<body>
+<div id="qunit">Unit Test for flexible.js</div>
+<div id="qunit-fixture">test markup</div>
+<div id="main" style="display:none;"></div>
+</body>
+</html>
