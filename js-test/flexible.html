@@ -65,9 +65,7 @@ test('関数の実行時にthis参照を指定されたオブジェクトに束�
   expect(3);
 
   function func () {
-    console.log("\n============");
   if (this instanceof restriction) {
-    console.log("\n" + this.echo());
   } 
     return this.echo();
   };
@@ -87,11 +85,27 @@ test('関数の実行時にthis参照を指定されたオブジェクトに束�
   equal((new restriction()).echo(), "hello");
 
   var result = flexible.restrict(func, (new restriction()));
-  console.log("RESULT:" + result);
   equal(result, "hello");
    
 });
 
+test('数値をnumber型と判定できる', function () {
+      deepEqual(flexible.objectType(12345), flexible.objectType.number);
+    });
+
+test('文字列をstring型と判定できる', function () {
+      deepEqual(flexible.objectType("test"), flexible.objectType.string);
+    });
+
+test('関数をfunction型と判定できる', function () {
+      function test () {};
+      deepEqual(flexible.objectType(test), flexible.objectType.func);
+    });
+
+test('オブジェクトをobject型と判定できる', function () {
+      var test = {};
+      deepEqual(flexible.objectType(test), flexible.objectType.obj);
+    });
 </script>
 </head>
 <body>

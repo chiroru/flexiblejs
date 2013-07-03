@@ -47,4 +47,21 @@ flexible.restrict = function () {
   var self = arguments[1];
   var args = Array.prototype.slice.call(arguments, 2);
   return func.apply(self, Array.prototype.concat.apply(args, arguments));
-}
+};
+
+flexible.objectType = function (suspect) {
+  if (typeof suspect == "number") {
+    return flexible.objectType.number;
+  } else if (typeof suspect == "string") {
+    return flexible.objectType.string;
+  } else if (typeof suspect == "function") {
+    return flexible.objectType.func;
+  } else {
+    return flexible.objectType.obj;
+  }
+};
+
+flexible.objectType.number = 0;
+flexible.objectType.string = 1;
+flexible.objectType.func = 2;
+flexible.objectType.obj = 3;
