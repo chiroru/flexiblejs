@@ -65,3 +65,40 @@ flexible.objectType.number = 0;
 flexible.objectType.string = 1;
 flexible.objectType.func = 2;
 flexible.objectType.obj = 3;
+
+flexible.to_s = function (suspect, indent, level) {
+  var delimiter = ",\n";
+  var indent = indent || " ";
+  var level = level || 0;
+  var buffer = "{\n";
+
+  var tmp = "";
+
+  for (var i = 0; i < (2 + level); i++) {
+    tmp += indent;
+  };
+
+  for (var key in suspect) {
+    buffer += tmp;
+    buffer += key + ":" + suspect[key] + delimiter;
+  };
+
+  buffer += "}\n";
+
+  console.log("\n" + buffer);
+
+  return "{}";
+};
+
+flexible._number_to_s = function (suspect) {
+  return "" + suspect;
+};
+
+flexible._string_to_s = function (suspect) {
+  return "\"" + suspect + "\"";
+};
+
+flexible._function_to_s= function (suspect) {
+  return "" + suspect;
+};
+

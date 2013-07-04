@@ -106,6 +106,32 @@ test('オブジェクトをobject型と判定できる', function () {
       var test = {};
       deepEqual(flexible.objectType(test), flexible.objectType.obj);
     });
+
+test('オブジェクトをリテラル表現に変換できる', function () {
+      var obj = {
+        name: "test",
+        tel: ["03-1111-2222",
+              "090-3333-4444"]
+              };
+
+      equal(flexible.to_s(obj), "{}");
+    });
+
+test('number型をリテラル表現にコンバートする', function () {
+      equal(flexible._number_to_s(123456789), "123456789");
+    });
+
+
+test('string型をリテラル表現にコンバートする', function () {
+      equal(flexible._string_to_s("test"), "\"test\"");
+    });
+
+test('Function型をリテラル表現にコンバートする', function () {
+      var test = function (a, b) {
+        var i = 0;
+      };
+      equal(flexible._function_to_s(test), "");
+    });
 </script>
 </head>
 <body>
