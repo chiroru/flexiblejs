@@ -1,0 +1,123 @@
+<!DOCTYPE htmll>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Unit Test</title>
+<link rel="stylesheet" href="../js/lib/qunit/qunit.css"></script>
+<script type="text/javascript" src="../js/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="../js/lib/qunit/qunit.js"></script>
+<script type="text/javascript">
+
+test("===演算子の比較", function () {
+    // ===演算子は値が同一かを演算する
+    ok("" === "", true);
+    ok('' === '', true);
+    ok(20 === 20, true);
+    ok("test" === "test", true);
+    ok(true === true, true);
+
+    // データ型が異なる場合は無条件でfalse
+    ok(20 === "20", "false");
+
+    ok(NaN === "20", "いづれか一つでもNaNの場合はfalse");
+    ok(NaN === NaN, "両方NaNであってもfalse");
+
+    ok(null === null, "true");
+    var a, b;
+    ok(a === b, "null 値の比較と等価 true");
+
+    ok(Undefined === Undefined, "これは左記の式を評価するまえにUndefinedを検出しエラーになる");
+
+});
+
+test("==演算子の比較", function () {
+    // データ型が同じ場合は値を比較
+    // ただし、数値と文字列の場合には、まず文字列を数値に変換した上で比較する
+    // この場合型変換が発生するため速度的に不利である
+    ok(20 == "20", "true");
+    // 文字列が数値に変換できなかった場合はNaNとなり必ずfalseになる
+    ok("test" == 20, "false");
+
+    ok(NaN == "20", "false");
+    ok(NaN == NaN, "false");
+
+    ok(null == null, "true");
+    var a, b;
+    ok(a == b, "true");
+
+    // どちらかの値だけが論理値だった場合、trueは数値の1に、falseは数値の0に変換されて比較される
+    ok(true == 1, "true");
+    ok(false == 0, "true");
+    ok(true == "1", "論理値が数値に変換され、数値と文字列の比較のため文字列が数値に変換されtrue");
+    ok(false == "0", "論理値が数値に変換され、数値と文字列の比較のため文字列が数値に変換されtrue");
+
+    // null と Undefined
+    // null は宣言したかが初期化してない変数
+    // Undefined は事前に宣言してない変数
+    ok(null == a, "nullとUndefinedを比較するとtrue");
+    ok(null == NaN, "nullとNaNを比較するとfalse");
+});
+
+test("===演算子によるオブジェクトの比較", function () {
+    var v1 = ['東京都', '大阪府', '福岡'];
+    var v2 = v1;
+    ok(v1 === v2, "参照が一致すればtreu");
+    ok(v1 == v2, "参照が一致すればtreu");
+    var w1 = ['東京都', '大阪府', '福岡'];
+    var w2 = ['東京都', '大阪府', '福岡'];
+    ok(w1 === w2, "値とインスタンスの型が同じでも参照がことなるとfalse");
+    ok(w1 == w2, "値とインスタンスの型が同じでも参照がことなるとfalse");
+});
+
+test("undefined値の判定", function () {
+    var v = {};
+    console.log(typeof v.a);
+    if (!v.a) ok(true, "if文による判定");
+        
+    if (v.a === undefined) ok(true, "undefined 変数を利用した比較");
+    // undefined は予約語ではなく（未定義値のリテラルではない）のでよくない判定方法
+    // 昔は上書きもできてた、今はconst扱いで上書きはできないが、関数スコープ内であれば同盟の変数は定義可能
+    undefined = "test";
+    if (v.a === undefined) ok(true, "undefined 変数は上書きされない");
+    !function () {
+         var undefined = "test";
+         if (!(v.a === undefined)) ok(true, "関数スコープ内ではローカルなundefined 変数は定義可能");
+    }();
+
+
+    if (typeof v.a === "undefined") ok(true, "typeof 演算子を利用した比較");
+
+    if (v.a === void 0) ok(true, "あらゆる値に作用しundefinedを返す演算子voidを利用した判定");
+    
+    if (v.a == null) ok(true, "==演算子でnullと比較");
+
+    // jQueryで採用している方法
+    !function (undefined) {
+        var a = {};
+        if (undefined === a.b ) ok(true, "関数スコープ内の未定義変数と比較");
+    }();
+});
+
+test("文字列リテラル", function() {
+    console.log("\"test\" is " + typeof "test");
+    equal(typeof "test", "string");
+    console.log('\'test\' is ' + typeof "test");
+    equal(typeof 'test', "string");
+});
+
+test("文字列の等価", function () {
+    console.log("\"test\" == \"test\"");
+    equal("test", "test");
+    console.log("\"test\" === \"test\"");
+    deepEqual("test", "test");
+    deepEqual("test", new String("test"));
+});
+
+</script>
+</head>
+<body>
+<div id="qunit">Unit Test</div>
+<div id="qunit-fixture">test markup</div>
+<div id="main" style="display:none;"></div>
+</body>
+</html>

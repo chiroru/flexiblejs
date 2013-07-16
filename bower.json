@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "jquery": "1.9.1",
+    "underscore": "1.4.4",
     "qunit": "1.11.0"
   }
 }
